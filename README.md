@@ -95,3 +95,16 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+####  Spencers Basic Instructions
+1) `android-studio`  (and leave that terminal)
+2) `npx react-native start` (and leave that terminal)
+3) `android-studio`  then you have it
+
+
+
+
+
+
+
+
