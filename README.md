@@ -99,12 +99,6 @@ To learn more about React Native, take a look at the following resources:
 ####  Spencers Basic Instructions
 1) `android-studio`  (and leave that terminal)
 2) `npx react-native start` (and leave that terminal)
-3) `android-studio`  then you have it
-
-
-
-
-
-
-
+3) `android-studio`  then you have it - was this necessary ?
+4) `npx react-native run-android`  and it starts the app in the emulator.
 
