@@ -97,8 +97,7 @@ To learn more about React Native, take a look at the following resources:
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
 ####  Spencers Basic Instructions
-1) `android-studio`  (and leave that terminal)
-2) `npx react-native start` (and leave that terminal)
-3) `android-studio`  then you have it - was this necessary ?
-4) `npx react-native run-android`  and it starts the app in the emulator.
+1) `npx react-native start` (and leave that terminal)
+2) `android-studio`  then you have it - was this necessary ?  THIS WAS NOT NECESSARY. only use 1 & 3
+3) `npx react-native run-android`  and it starts the app in the emulator.
 
