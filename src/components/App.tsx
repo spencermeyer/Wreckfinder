@@ -1,5 +1,5 @@
 import React from 'react';
-// import {Table} from './Table.tsx'
+import WreckTable from './WreckTable.tsx'
 
 import {
   ScrollView,
@@ -16,7 +16,7 @@ export default function App(): React.JSX.Element {
       <Text>
         Welcome to Wreckypedia
       </Text>
-      {/*<Table ></Table>*/}
+      <WreckTable />
     </View>
 	)	
 }
