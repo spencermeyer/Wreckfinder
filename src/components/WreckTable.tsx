@@ -1,37 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { DataTable } from 'react-native-paper';
+import { fetchWrecks } from '../api/dataService';
 
 const WreckTable = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadData();
+  }, [])
+
+  const loadData = async() => {
+    const result = await fetchWrecks();
+    setData(result);
+    console.log(result);
+  }
+
   return (
   	<>
-  	 <Text>grrrrXXX</Text>
+  	 <Text>Table of Wrecks</Text>
   	 <DataTable style={styles.container}>
   	 	<DataTable.Header style={styles.tableHeader}>
-  	 	  <DataTable.Title>Name</DataTable.Title>
-  	 	  <DataTable.Title>Favourite Food</DataTable.Title>
-  	 	  <DataTable.Title>Age</DataTable.Title>
+  	 	  <DataTable.Title>Title</DataTable.Title>
+  	 	  <DataTable.Title>Latitude</DataTable.Title>
+  	 	  <DataTable.Title>Longitude</DataTable.Title>
   	 	</DataTable.Header>
-  	 	<DataTable.Row>
-  	 	  <DataTable.Cell>Radhika</DataTable.Cell>
-  	 	  <DataTable.Cell>Dosa</DataTable.Cell>
-  	 	  <DataTable.Cell>23</DataTable.Cell>
-  	 	</DataTable.Row>
-  	 	<DataTable.Row>
-  	 	  <DataTable.Cell>Krishna</DataTable.Cell>
-  	 	  <DataTable.Cell>Uttapam</DataTable.Cell>
-  	 	  <DataTable.Cell>26</DataTable.Cell>
-  	 	</DataTable.Row>
-  	 	<DataTable.Row>
-  	 	  <DataTable.Cell>Vanshika</DataTable.Cell>
-  	 	  <DataTable.Cell>Brownie</DataTable.Cell>
-  	 	  <DataTable.Cell>20</DataTable.Cell>
-  	 	</DataTable.Row>
-  	 	<DataTable.Row>
-  	 	  <DataTable.Cell>Teena</DataTable.Cell>
-  	 	  <DataTable.Cell>Pizza</DataTable.Cell>
-  	 	  <DataTable.Cell>24</DataTable.Cell>
-  	 	</DataTable.Row> 	 	
+      {data.map((wreck, index) => {
+        console.log('create row')
+        return(
+    	 	<DataTable.Row>
+    	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>
+    	 	  <DataTable.Cell>{wreck.latitude}</DataTable.Cell>
+    	 	  <DataTable.Cell>{wreck.longitude}</DataTable.Cell>
+    	 	</DataTable.Row>
+        )
+      })}
+
+ 	
   	 </DataTable>
   	</>
   );
@@ -42,8 +48,9 @@ export default WreckTable;
 const styles = StyleSheet.create({
   container: {
     padding: 15,
+    backgroundColor: '#fff'
   },
   tableHeader: {
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#D3D3D3',
   },
 });
