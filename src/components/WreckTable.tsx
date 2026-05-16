@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { fetchWrecks } from '../api/dataService';
 
@@ -19,26 +19,28 @@ const WreckTable = () => {
 
   return (
   	<>
-  	 <Text>Table of Wrecks</Text>
-  	 <DataTable style={styles.container}>
-  	 	<DataTable.Header style={styles.tableHeader}>
-  	 	  <DataTable.Title>Title</DataTable.Title>
-  	 	  <DataTable.Title>Latitude</DataTable.Title>
-  	 	  <DataTable.Title>Longitude</DataTable.Title>
-  	 	</DataTable.Header>
-      {data.map((wreck, index) => {
-        console.log('create row')
-        return(
-    	 	<DataTable.Row>
-    	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>
-    	 	  <DataTable.Cell>{wreck.latitude}</DataTable.Cell>
-    	 	  <DataTable.Cell>{wreck.longitude}</DataTable.Cell>
-    	 	</DataTable.Row>
-        )
-      })}
-
- 	
-  	 </DataTable>
+     <ScrollView style={styles.container}>
+    	 <Text>Table of Wrecks</Text>
+    	 <DataTable style={styles.container}>
+    	 	<DataTable.Header style={styles.tableHeader}>
+    	 	  <DataTable.Title>Title</DataTable.Title>
+    	 	  <DataTable.Title>Latitude</DataTable.Title>
+    	 	  <DataTable.Title>Longitude</DataTable.Title>
+          <DataTable.Title>Notes</DataTable.Title>
+    	 	</DataTable.Header>
+        {data.map((wreck, index) => {
+          console.log('create row')
+          return(
+      	 	<DataTable.Row>
+      	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>
+      	 	  <DataTable.Cell>{wreck.latitude}</DataTable.Cell>
+      	 	  <DataTable.Cell>{wreck.longitude}</DataTable.Cell>
+            <DataTable.Cell>{wreck.notes}</DataTable.Cell>
+      	 	</DataTable.Row>
+          )
+        })}
+    	 </DataTable>
+     </ScrollView>
   	</>
   );
 };
