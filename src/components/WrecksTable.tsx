@@ -14,7 +14,6 @@ const WrecksTable = () => {
   const loadData = async() => {
     const result = await fetchWrecks();
     setData(result);
-    console.log(result);
   }
 
   return (
@@ -29,7 +28,6 @@ const WrecksTable = () => {
           <DataTable.Title>Notes</DataTable.Title>
     	 	</DataTable.Header>
         {data.map((wreck, index) => {
-          console.log('create row')
           return(
       	 	<DataTable.Row key={wreck.id}>
       	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>

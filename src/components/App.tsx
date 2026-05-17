@@ -4,15 +4,14 @@ import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { Provider as PaperProvider, Appbar, Menu, Divider } from 'react-native-paper';
 
 // Import your views (or use the placeholders below to test)
-import WrecksTable from './WrecksTable'; 
+import WrecksTable from './WrecksTable';
+import Map from './Map';
 
 const App = () => {
   // 'list' will show your table, 'details' will show row details
   const [currentScreen, setCurrentScreen] = useState('list');
   const [selectedWreck, setSelectedWreck] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
-
-  console.log("=== APP STATE UPDATE ===", { currentScreen, hasWreckData: !!selectedWreck });
 
   // Helper function to handle row selection from your table
   const handleSelectWreck = (wreckData) => {
@@ -54,16 +53,13 @@ const App = () => {
         {/* Dynamic Screen Layout Layer */}
         <View style={styles.content}>
         {(() => {
-            console.log("Switch routing engine evaluated:", currentScreen);
             switch (currentScreen) {
               case 'list':
-                console.log('leest');
                 // Renders the main database table
                 return <WrecksTable onSelectWreck={handleSelectWreck} />;
                 
               case 'details':
                 // Renders the specific shipwreck detail layout
-                console.log('detassssss')
                 return (
                   <View style={styles.center}>
                     <Text style={styles.title}>{selectedWreck?.name || "Unknown Vessel"}</Text>
@@ -74,12 +70,8 @@ const App = () => {
                 
               case 'map':
                 // Renders the new Map screen layout placeholder
-                console.log('map was clicked');
                 return (
-                  <View style={styles.center}>
-                    <Text style={styles.title}>🗺️ Map View</Text>
-                    <Text style={styles.detailText}>Interactive coordinates will load here.</Text>
-                  </View>
+                  <Map/>
                 );
                 
               default:
