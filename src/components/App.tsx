@@ -12,6 +12,8 @@ const App = () => {
   const [selectedWreck, setSelectedWreck] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
 
+  console.log("=== APP STATE UPDATE ===", { currentScreen, hasWreckData: !!selectedWreck });
+
   // Helper function to handle row selection from your table
   const handleSelectWreck = (wreckData) => {
     setSelectedWreck(wreckData);
@@ -40,7 +42,7 @@ const App = () => {
               <Divider />
               <Menu.Item onPress={() => { alert('Settings Clicked'); setMenuVisible(false); }} title="Settings" />
               <Divider />
-              <Menu.Item onPress={() => { setCurrentScreen('Map'); setMenuVisible(false); }} title="Map" />
+              <Menu.Item onPress={() => { setCurrentScreen('map'); setMenuVisible(false) }} title="Map" />
             </Menu>
           )}
           <Appbar.Content 
@@ -51,19 +53,41 @@ const App = () => {
 
         {/* Dynamic Screen Layout Layer */}
         <View style={styles.content}>
-          {currentScreen === 'list' ? (
-            // Pass the selection handler down to your DataTable component
-            <WrecksTable onSelectWreck={handleSelectWreck} />
-          ) : (
-            // Simple Details View
-            <View style={styles.center}>
-              <Text style={styles.title}>{selectedWreck?.name || "Unknown Vessel"}</Text>
-              <Text style={styles.detailText}>Depth: {selectedWreck?.depth || "N/A"} meters</Text>
-              <Text style={styles.detailText}>Location: {selectedWreck?.location || "Unknown Coordinates"}</Text>
-            </View>
-          )}
+        {(() => {
+            console.log("Switch routing engine evaluated:", currentScreen);
+            switch (currentScreen) {
+              case 'list':
+                console.log('leest');
+                // Renders the main database table
+                return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                
+              case 'details':
+                // Renders the specific shipwreck detail layout
+                console.log('detassssss')
+                return (
+                  <View style={styles.center}>
+                    <Text style={styles.title}>{selectedWreck?.name || "Unknown Vessel"}</Text>
+                    <Text style={styles.detailText}>Depth: {selectedWreck?.depth || "N/A"} meters</Text>
+                    <Text style={styles.detailText}>Location: {selectedWreck?.location || "Unknown"}</Text>
+                  </View>
+                );
+                
+              case 'map':
+                // Renders the new Map screen layout placeholder
+                console.log('map was clicked');
+                return (
+                  <View style={styles.center}>
+                    <Text style={styles.title}>🗺️ Map View</Text>
+                    <Text style={styles.detailText}>Interactive coordinates will load here.</Text>
+                  </View>
+                );
+                
+              default:
+                // Fail-safe: fallback to the main list if something goes wrong
+                return <WrecksTable onSelectWreck={handleSelectWreck} />;
+            }
+          })()}
         </View>
-
       </SafeAreaView>
     </PaperProvider>
   );
