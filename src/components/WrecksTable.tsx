@@ -3,7 +3,7 @@ import { StyleSheet, Text, ScrollView } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { fetchWrecks } from '../api/dataService';
 
-const WreckTable = () => {
+const WrecksTable = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,7 @@ const WreckTable = () => {
         {data.map((wreck, index) => {
           console.log('create row')
           return(
-      	 	<DataTable.Row>
+      	 	<DataTable.Row key={wreck.id}>
       	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>
       	 	  <DataTable.Cell>{wreck.latitude}</DataTable.Cell>
       	 	  <DataTable.Cell>{wreck.longitude}</DataTable.Cell>
@@ -45,7 +45,7 @@ const WreckTable = () => {
   );
 };
 
-export default WreckTable;
+export default WrecksTable;
 
 const styles = StyleSheet.create({
   container: {
