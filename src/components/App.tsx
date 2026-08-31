@@ -56,10 +56,9 @@ const App = () => {
         {(() => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
-              case 'list':
-                // Renders the main database table
-                return <WrecksTable onSelectWreck={handleSelectWreck} />;
-                
+              case 'list':           
+                return <Map/>;                
+                // return <WrecksTable onSelectWreck={handleSelectWreck} />;
               case 'details':
                 // Renders the specific shipwreck detail layout
                 return (
@@ -69,13 +68,8 @@ const App = () => {
                     <Text style={styles.detailText}>Location: {selectedWreck?.location || "Unknown"}</Text>
                   </View>
                 );
-                
               case 'map':
-                // Renders the new Map screen layout placeholder
-                return (
-                  <Map/>
-                );
-                
+                return (<Map/>);                
               default:
                 // Fail-safe: fallback to the main list if something goes wrong
                 return <WrecksTable onSelectWreck={handleSelectWreck} />;

@@ -84,6 +84,17 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+    
+        // Read MAPS_API_KEY from local.properties
+        Properties properties = new Properties()
+        if (project.rootProject.file('local.properties').exists()) {
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        }
+
+        // Pass it to the manifest as a placeholder
+        manifestPlaceholders = [
+            MAPS_API_KEY: properties.getProperty('MAPS_API_KEY', '')
+        ]
     }
     signingConfigs {
         debug {
