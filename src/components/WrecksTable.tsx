@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, ScrollView } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { fetchWrecks } from '../api/dataService';
+import tableStyles from '../styles/table';
 
 const WrecksTable = () => {
   const [data, setData] = useState([]);
@@ -13,27 +14,29 @@ const WrecksTable = () => {
 
   const loadData = async() => {
     const result = await fetchWrecks();
+
+    console.log(result)
+
     setData(result);
   }
 
   return (
   	<>
-     <ScrollView style={styles.container}>
-    	 <Text>Table of Wrecks</Text>
-    	 <DataTable style={styles.container}>
-    	 	<DataTable.Header style={styles.tableHeader}>
-    	 	  <DataTable.Title>Title</DataTable.Title>
-    	 	  <DataTable.Title>Latitude</DataTable.Title>
-    	 	  <DataTable.Title>Longitude</DataTable.Title>
-          <DataTable.Title>Notes</DataTable.Title>
+     <ScrollView style={tableStyles.container}>
+    	 <DataTable style={tableStyles.tableWrapper}>
+    	 	<DataTable.Header style={tableStyles.headerRow}>
+    	 	  <DataTable.Title textStyle={tableStyles.headerText}>Title</DataTable.Title>
+    	 	  <DataTable.Title textStyle={tableStyles.headerText}>Latitude</DataTable.Title>
+    	 	  <DataTable.Title textStyle={tableStyles.headerText}>Longitude</DataTable.Title>
+          <DataTable.Title textStyle={tableStyles.headerText}>Notes</DataTable.Title>
     	 	</DataTable.Header>
         {data.map((wreck, index) => {
           return(
-      	 	<DataTable.Row key={wreck.id}>
-      	 	  <DataTable.Cell>{wreck.title}</DataTable.Cell>
-      	 	  <DataTable.Cell>{wreck.latitude}</DataTable.Cell>
-      	 	  <DataTable.Cell>{wreck.longitude}</DataTable.Cell>
-            <DataTable.Cell>{wreck.notes}</DataTable.Cell>
+      	 	<DataTable.Row key={wreck.id} style={tableStyles.row, index %2 === 0 ? tableStyles.evenRow : tableStyles.oddRow}>
+      	 	  <DataTable.Cell textStyle={tableStyles.cellText}>{wreck.title}</DataTable.Cell>
+      	 	  <DataTable.Cell textStyle={tableStyles.cellText} numeric>{wreck.latitude}</DataTable.Cell>
+      	 	  <DataTable.Cell textStyle={tableStyles.cellText} numeric>{wreck.longitude}</DataTable.Cell>
+            <DataTable.Cell textStyle={tableStyles.cellText}>{wreck.notes}</DataTable.Cell>
       	 	</DataTable.Row>
           )
         })}

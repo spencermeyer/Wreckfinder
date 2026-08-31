@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { Provider as PaperProvider, Appbar, Menu, Divider } from 'react-native-paper';
+import styles from '../styles/styles';
 
 // Import your views (or use the placeholders below to test)
 import WrecksTable from './WrecksTable';
@@ -53,6 +54,7 @@ const App = () => {
         {/* Dynamic Screen Layout Layer */}
         <View style={styles.content}>
         {(() => {
+            console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':
                 // Renders the main database table
@@ -84,38 +86,5 @@ const App = () => {
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    backgroundColor: '#1E3A8A', // Deep Ocean Blue
-  },
-  headerTitle: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  content: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#1E3A8A',
-  },
-  detailText: {
-    fontSize: 18,
-    marginVertical: 4,
-  },
-});
 
 export default App;
