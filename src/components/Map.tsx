@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
-import mapStyles from '../styles/map';
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
+import { View, Text } from 'react-native';
+import mapStyles, { lightMapStyle } from '../styles/map';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { fetchWrecks } from '../api/dataService';
 
 interface WreckPoint {
@@ -14,8 +14,8 @@ interface WreckPoint {
 
 const Map = () => {
   const [data, setData] = useState<WreckPoint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [region, setRegion] = useState({
+  const [_loading, setLoading] = useState(true);
+  const [region] = useState({
     latitude: 50.96,
     longitude: -1.39,
     latitudeDelta: 0.2,
@@ -39,6 +39,8 @@ const Map = () => {
       <MapView
         provider={PROVIDER_GOOGLE}
         style={mapStyles.map}
+        customMapStyle={lightMapStyle}
+        loadingBackgroundColor="#c0c9d2"
         initialRegion={region}
         showsUserLocation={true}
         showsMyLocationButton={true}
