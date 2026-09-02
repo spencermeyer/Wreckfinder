@@ -1,12 +1,14 @@
 // App.jsx
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 import { Provider as PaperProvider, Appbar, Menu, Divider } from 'react-native-paper';
 import styles from '../styles/styles';
 
 // Import your views (or use the placeholders below to test)
 import WrecksTable from './WrecksTable';
 import Map from './Map';
+
+const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
 
 const App = () => {
   // 'list' will show your table, 'details' will show row details
@@ -34,8 +36,7 @@ const App = () => {
               visible={menuVisible}
               onDismiss={() => setMenuVisible(false)}
               anchor={<Appbar.Action
-                       // icon="menu" color="#fff" 
-                       icon={({ size, color }) => <Text style={{ fontSize: 24, color: '#fff' }}>☰</Text>}
+                       icon={BurgerIcon}
                        onPress={() => setMenuVisible(true)} />}
             >
               <Menu.Item onPress={() => { setCurrentScreen('list'); setMenuVisible(false); }} title="Wrecks Database" />
@@ -57,8 +58,8 @@ const App = () => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':           
-                return <Map/>;                
-                // return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                // return <Map/>;               
+                return <WrecksTable onSelectWreck={handleSelectWreck} />;
               case 'details':
                 // Renders the specific shipwreck detail layout
                 return (
