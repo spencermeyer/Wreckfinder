@@ -7,8 +7,7 @@ export const fetchWrecks = async (region) => {
     let url = `${API_BASE_URL}/wrecks`;
     if (region && region.latitude != null && region.longitude != null) {
       const query = `?lat=${region.latitude}&lng=${region.longitude}` +
-        (region.latitudeDelta != null ? `&latDelta=${region.latitudeDelta}` : '') +
-        (region.longitudeDelta != null ? `&lngDelta=${region.longitudeDelta}` : '');
+        (region.zoom != null ? `&zoom=${region.zoom}` : '');
       url += query;
     }
     const response = await fetch(url);

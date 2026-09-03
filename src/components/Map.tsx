@@ -11,6 +11,14 @@ export interface UserLocation {
   longitudeDelta: number;
 }
 
+/**
+ * Converts a longitude delta into a standard map zoom level (0 to 20).
+ */
+export const getZoomLevel = (longitudeDelta: number): number => {
+  if (longitudeDelta <= 0) return 20;
+  return Math.max(0, Math.min(20, Math.round(Math.log(360 / longitudeDelta) / Math.LN2)));
+};
+
 interface WreckPoint {
   id: string;
   title: string;
@@ -31,6 +39,7 @@ const Map = () => {
   const userLocationRef = useRef<{ latitude: number; longitude: number } | null>(null);
   const hasInitialCenteredRef = useRef(false);
   const currentRegionRef = useRef<Region>(initialRegion);
+  const currentZoomRef = useRef<number>(getZoomLevel(initialRegion.longitudeDelta));
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [data, setData] = useState<WreckPoint[]>([]);
@@ -136,12 +145,20 @@ const Map = () => {
   };
 
   /**
-   * Listener called when the user finishes scrolling/moving the map.
+   * Listener called when the user finishes scrolling/moving/zooming the map.
    * `details.isGesture` is true when triggered directly by a user touch/drag gesture.
    */
   const handleRegionChangeComplete = (newRegion: Region, details?: Details) => {
     // Silently update the current scrolled position ref without triggering re-renders
     currentRegionRef.current = newRegion;
+
+    // Detect zoom level change
+    const newZoom = getZoomLevel(newRegion.longitudeDelta);
+    const prevZoom = currentZoomRef.current;
+    if (newZoom !== prevZoom) {
+      console.log(`Zoom level changed: ${prevZoom} -> ${newZoom} (${newZoom > prevZoom ? 'Zoomed IN' : 'Zoomed OUT'})`);
+      currentZoomRef.current = newZoom;
+    }
 
     // Only fetch new data if the user physically scrolled/zoomed the map
     if (details?.isGesture) {
@@ -149,9 +166,9 @@ const Map = () => {
         clearTimeout(debounceTimerRef.current);
       }
 
-      // Debounce 500ms so we only fetch after the user stops scrolling
+      // Debounce 500ms so we only fetch after the user stops scrolling/zooming
       debounceTimerRef.current = setTimeout(() => {
-        console.log('Map scroll settled, fetching wrecks for region:', newRegion);
+        console.log('Map movement settled, fetching wrecks for region:', newRegion, 'zoom:', newZoom);
         loadData(newRegion);
       }, 500);
     }
@@ -177,9 +194,10 @@ const Map = () => {
 
   const loadData = async (targetRegion = currentRegionRef.current) => {
     setLoading(true);
-    const result = await fetchWrecks(targetRegion);
-    console.log('Wrecks result for region:', targetRegion, 'count:', result?.length);
-    console.log(result);
+    const zoom = getZoomLevel(targetRegion.longitudeDelta);
+    const regionWithZoom = { ...targetRegion, zoom };
+    const result = await fetchWrecks(regionWithZoom);
+    console.log('Wrecks result for region:', regionWithZoom, 'count:', result?.length);
     setData(result);
     setLoading(false);
   };
