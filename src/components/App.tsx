@@ -1,7 +1,6 @@
-// App.jsx
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
-import { Provider as PaperProvider, Appbar, Menu, Divider } from 'react-native-paper';
+import { SafeAreaView, View, Text, Pressable } from 'react-native';
+import { Provider as PaperProvider, Appbar, Menu, Divider, Surface } from 'react-native-paper';
 import styles from '../styles/styles';
 
 // Import your views (or use the placeholders below to test)
@@ -22,6 +21,16 @@ const App = () => {
     setCurrentScreen('details');
   };
 
+  const handleOpenMenu = () => {
+    console.log('Menu burger icon pressed');
+    setMenuVisible(true);
+  };
+
+  const handleCloseMenu = () => {
+    console.log('Menu dismissed');
+    setMenuVisible(false);
+  };
+
   return (
     <PaperProvider>
       <SafeAreaView style={styles.container}>
@@ -32,22 +41,20 @@ const App = () => {
             <Appbar.BackAction color="#fff" onPress={() => setCurrentScreen('list')} />
           ) : (
             // Simple Action Menu for the main dashboard
-            <Menu
-              visible={menuVisible}
-              onDismiss={() => setMenuVisible(false)}
-              anchor={<Appbar.Action
-                       icon={BurgerIcon}
-                       onPress={() => setMenuVisible(true)} />}
-            >
-              <Menu.Item onPress={() => { setCurrentScreen('list'); setMenuVisible(false); }} title="Wrecks Database" />
-              <Divider />
-              <Menu.Item onPress={() => { alert('Settings Clicked'); setMenuVisible(false); }} title="Settings" />
-              <Divider />
-              <Menu.Item onPress={() => { setCurrentScreen('map'); setMenuVisible(false) }} title="Map" />
-            </Menu>
+            <Appbar.Action
+              icon={BurgerIcon}
+              onPress={handleOpenMenu}
+              accessibilityLabel="Open menu"
+            />
           )}
           <Appbar.Content 
-            title={currentScreen === 'list' ? "Shipwrecks Database" : selectedWreck?.name || "Details"} 
+            title={
+              currentScreen === 'list'
+                ? "Shipwrecks Database"
+                : currentScreen === 'map'
+                ? "Shipwrecks Map"
+                : selectedWreck?.name || "Details"
+            } 
             titleStyle={styles.headerTitle}
           />
         </Appbar.Header>
@@ -77,6 +84,44 @@ const App = () => {
             }
           })()}
         </View>
+
+        {/* Dropdown Menu Overlay */}
+        {menuVisible && (
+          <View style={styles.menuOverlayContainer}>
+            <Pressable style={styles.modalBackdrop} onPress={handleCloseMenu} />
+            <Surface style={styles.menuDropdown} elevation={5}>
+              <Menu.Item
+                onPress={() => {
+                  console.log('Menu item chosen: Wrecks Database');
+                  setCurrentScreen('list');
+                  setMenuVisible(false);
+                }}
+                title="Wrecks Database"
+                titleStyle={styles.menuItemTitle}
+              />
+              <Divider style={styles.menuDivider} />
+              <Menu.Item
+                onPress={() => {
+                  console.log('Menu item chosen: Settings');
+                  alert('Settings Clicked');
+                  setMenuVisible(false);
+                }}
+                title="Settings"
+                titleStyle={styles.menuItemTitle}
+              />
+              <Divider style={styles.menuDivider} />
+              <Menu.Item
+                onPress={() => {
+                  console.log('Menu item chosen: Map');
+                  setCurrentScreen('map');
+                  setMenuVisible(false);
+                }}
+                title="Map"
+                titleStyle={styles.menuItemTitle}
+              />
+            </Surface>
+          </View>
+        )}
       </SafeAreaView>
     </PaperProvider>
   );

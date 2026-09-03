@@ -8,10 +8,9 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#1E3A8A', // Deep Ocean Blue
-    zIndex: 10,
-    elevation: 10,
     height: 75,
     justifyContent: 'center',
+    elevation: 4,
   },
   headerTitle: {
     color: '#fff',
@@ -27,8 +26,36 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    zindex: 10,
+  },
+  menuOverlayContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  menuDropdown: {
+    position: 'absolute',
+    top: 80,
+    left: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    minWidth: 220,
     elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    paddingVertical: 6,
+  },
+  menuItemTitle: {
+    color: '#1E293B',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  menuDivider: {
+    backgroundColor: '#E2E8F0',
+    height: 1,
   },
   center: {
     flex: 1,

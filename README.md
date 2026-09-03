@@ -98,21 +98,22 @@ To learn more about React Native, take a look at the following resources:
 
 ####  Spencers Basic Instructions
 1) `npx react-native start` (and leave that terminal)
-2) `android-studio`  then you have it - was this necessary ?  THIS WAS NOT NECESSARY. only use 1 & 3
+2) `android-studio` only needed for the emulator, but now I test with a real device.
 3) `npx react-native run-android`  and it starts the app in the emulator.
 
-Here is what I had to do to get it to run on an Pixel6A:
+Here is what I had to do to get it to run on a Pixel6A:
 `sudo nano /etc/udev/rules.d/51-android.rules`
 `sudo udevadm control --reload-rules`
 `sudo service udev restart`
 
 `adb reverse tcp:3000 tcp:3000`
 `adb shell input keyevent 82` to get the refresh menu
-MAY HAVE TO DO THESE EACH TIME?
 
 optional:
 `adb kill-server`
 `adb start-server`
+
+now using agy !
 
 
 
