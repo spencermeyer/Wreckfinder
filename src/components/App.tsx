@@ -6,6 +6,7 @@ import styles from '../styles/styles';
 // Import your views (or use the placeholders below to test)
 import WrecksTable from './WrecksTable';
 import Map from './Map';
+import About from './About';
 
 const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
 
@@ -53,6 +54,8 @@ const App = () => {
                 ? "Shipwrecks Database"
                 : currentScreen === 'map'
                 ? "Shipwrecks Map"
+                : currentScreen === 'about'
+                ? "About"
                 : selectedWreck?.name || "Details"
             } 
             titleStyle={styles.headerTitle}
@@ -77,7 +80,9 @@ const App = () => {
                   </View>
                 );
               case 'map':
-                return (<Map/>);                
+                return (<Map/>);
+              case 'about':
+                return (<About/>);
               default:
                 // Fail-safe: fallback to the main list if something goes wrong
                 return <WrecksTable onSelectWreck={handleSelectWreck} />;
@@ -102,11 +107,11 @@ const App = () => {
               <Divider style={styles.menuDivider} />
               <Menu.Item
                 onPress={() => {
-                  console.log('Menu item chosen: Settings');
-                  alert('Settings Clicked');
+                  console.log('Menu item chosen: About');
+                  setCurrentScreen('about');
                   setMenuVisible(false);
                 }}
-                title="Settings"
+                title="About"
                 titleStyle={styles.menuItemTitle}
               />
               <Divider style={styles.menuDivider} />
