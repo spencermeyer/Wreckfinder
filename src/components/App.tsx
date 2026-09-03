@@ -68,8 +68,8 @@ const App = () => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':           
-                // return <Map/>;               
-                return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                return <Map/>;               
+                // return <WrecksTable onSelectWreck={handleSelectWreck} />;
               case 'details':
                 // Renders the specific shipwreck detail layout
                 return (
