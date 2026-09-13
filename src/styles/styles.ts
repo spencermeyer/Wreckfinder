@@ -16,6 +16,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerTitleIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 10,
+  },
+  headerTitleText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
   menuBurger: {
     fontSize: 24,
     color: '#fff',

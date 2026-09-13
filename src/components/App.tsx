@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, Pressable } from 'react-native';
+import { SafeAreaView, View, Text, Pressable, Image } from 'react-native';
 import { Provider as PaperProvider, Appbar, Menu, Divider, Surface } from 'react-native-paper';
 import styles from '../styles/styles';
 
@@ -8,6 +8,8 @@ import WrecksTable from './WrecksTable';
 import Map from './Map';
 import About from './About';
 import Wreck from './Wreck';
+
+const shipwreckIcon = require('../assets/shipwreck-icon.png');
 
 const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
 const BackIcon = () => <Text style={styles.backIcon}>←</Text>;
@@ -36,6 +38,22 @@ const App = () => {
     setMenuVisible(false);
   };
 
+  const getHeaderTitle = () => {
+    switch (currentScreen) {
+      case 'list':
+        return 'Shipwrecks Database';
+      case 'map':
+        return 'Shipwrecks Map';
+      case 'about':
+        return 'About';
+      default:
+        return selectedWreck?.title || selectedWreck?.name || 'Wreck Details';
+    }
+  };
+
+  const showShipwreckIcon = ['list', 'map', 'about'].includes(currentScreen);
+  const headerTitle = getHeaderTitle();
+
   return (
     <PaperProvider>
       <SafeAreaView style={styles.container}>
@@ -51,13 +69,14 @@ const App = () => {
           )}
           <Appbar.Content 
             title={
-              currentScreen === 'list'
-                ? "Shipwrecks Database"
-                : currentScreen === 'map'
-                ? "Shipwrecks Map"
-                : currentScreen === 'about'
-                ? "About"
-                : selectedWreck?.title || selectedWreck?.name || "Wreck Details"
+              showShipwreckIcon ? (
+                <View style={styles.headerTitleRow}>
+                  <Image source={shipwreckIcon} style={styles.headerTitleIcon} />
+                  <Text style={styles.headerTitleText}>{headerTitle}</Text>
+                </View>
+              ) : (
+                headerTitle
+              )
             } 
             titleStyle={styles.headerTitle}
           />
