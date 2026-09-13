@@ -69,16 +69,13 @@ const App = () => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':           
-                // return <Wreck wreckId={114} />;               
                 return <WrecksTable onSelectWreck={handleSelectWreck} />;
               case 'details':
-                // Renders the specific shipwreck detail layout
                 return (
-                  <View style={styles.center}>
-                    <Text style={styles.title}>{selectedWreck?.name || "Unknown Vessel"}</Text>
-                    <Text style={styles.detailText}>Depth: {selectedWreck?.depth || "N/A"} meters</Text>
-                    <Text style={styles.detailText}>Location: {selectedWreck?.location || "Unknown"}</Text>
-                  </View>
+                  <Wreck
+                    wreckId={typeof selectedWreck === 'object' && selectedWreck !== null ? selectedWreck.id : selectedWreck}
+                    wreck={typeof selectedWreck === 'object' ? selectedWreck : null}
+                  />
                 );
               case 'map':
                 return (<Map/>);

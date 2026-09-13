@@ -4,7 +4,11 @@ import { DataTable } from 'react-native-paper';
 import { fetchWrecks } from '../api/dataService';
 import tableStyles from '../styles/table';
 
-const WrecksTable = () => {
+interface WrecksTableProps {
+  onSelectWreck?: (id: string | number) => void;
+}
+
+const WrecksTable: React.FC<WrecksTableProps> = ({ onSelectWreck }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,8 +18,6 @@ const WrecksTable = () => {
 
   const loadData = async() => {
     const result = await fetchWrecks();
-
-    console.log(result)
 
     setData(result);
   }
@@ -33,7 +35,12 @@ const WrecksTable = () => {
         {data.map((wreck, index) => {
           return(
       	 	<DataTable.Row key={wreck.id} style={tableStyles.row, index %2 === 0 ? tableStyles.evenRow : tableStyles.oddRow}>
-      	 	  <DataTable.Cell textStyle={tableStyles.cellText}>{wreck.title}</DataTable.Cell>
+      	 	  <DataTable.Cell
+                textStyle={[tableStyles.cellText, styles.linkText]}
+                onPress={() => onSelectWreck && onSelectWreck(wreck.id)}
+              >
+                {wreck.title}
+              </DataTable.Cell>
       	 	  <DataTable.Cell textStyle={tableStyles.cellText} numeric>{wreck.latitude}</DataTable.Cell>
       	 	  <DataTable.Cell textStyle={tableStyles.cellText} numeric>{wreck.longitude}</DataTable.Cell>
             <DataTable.Cell textStyle={tableStyles.cellText}>{wreck.notes}</DataTable.Cell>
@@ -55,5 +62,10 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     backgroundColor: '#D3D3D3',
+  },
+  linkText: {
+    color: '#2563EB',
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
 });
