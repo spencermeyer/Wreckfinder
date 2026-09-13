@@ -24,6 +24,14 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     includeFontPadding: false,
   },
+  backIcon: {
+    fontSize: 24,
+    color: '#fff',
+    lineHeight: 24,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
   content: {
     flex: 1,
   },

@@ -10,6 +10,7 @@ import About from './About';
 import Wreck from './Wreck';
 
 const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
+const BackIcon = () => <Text style={styles.backIcon}>←</Text>;
 
 const App = () => {
   // 'list' will show your table, 'details' will show row details
@@ -39,8 +40,11 @@ const App = () => {
         {/* Top Header Bar */}
         <Appbar.Header style={styles.header}>
           {currentScreen === 'details' ? (
-            // Show a back arrow if we are looking at a wreck's details
-            <Appbar.BackAction color="#fff" onPress={() => setCurrentScreen('list')} />
+            <Appbar.Action
+              icon={BackIcon}
+              onPress={() => setCurrentScreen('list')}
+              accessibilityLabel="Back to list"
+            />
           ) : (
             // Simple Action Menu for the main dashboard
             <Appbar.Action
@@ -57,7 +61,7 @@ const App = () => {
                 ? "Shipwrecks Map"
                 : currentScreen === 'about'
                 ? "About"
-                : selectedWreck?.name || "Details"
+                : selectedWreck?.title || selectedWreck?.name || "Wreck Details"
             } 
             titleStyle={styles.headerTitle}
           />
