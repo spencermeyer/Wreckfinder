@@ -9,7 +9,7 @@ interface WrecksTableProps {
 }
 
 const WrecksTable: React.FC<WrecksTableProps> = ({ onSelectWreck }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,9 +23,8 @@ const WrecksTable: React.FC<WrecksTableProps> = ({ onSelectWreck }) => {
   }
 
   return (
-  	<>
-     <ScrollView style={tableStyles.container}>
-    	 <DataTable style={tableStyles.tableWrapper}>
+    <ScrollView style={tableStyles.container}>
+    	 <DataTable>
     	 	<DataTable.Header style={tableStyles.headerRow}>
     	 	  <DataTable.Title textStyle={tableStyles.headerText}>Title</DataTable.Title>
     	 	  <DataTable.Title textStyle={tableStyles.headerText}>Latitude</DataTable.Title>
@@ -34,7 +33,7 @@ const WrecksTable: React.FC<WrecksTableProps> = ({ onSelectWreck }) => {
     	 	</DataTable.Header>
         {data.map((wreck, index) => {
           return(
-      	 	<DataTable.Row key={wreck.id} style={tableStyles.row, index %2 === 0 ? tableStyles.evenRow : tableStyles.oddRow}>
+      	 	<DataTable.Row key={wreck.id} style={[tableStyles.row, index % 2 === 0 ? tableStyles.evenRow : tableStyles.oddRow]}>
       	 	  <DataTable.Cell
                 textStyle={[tableStyles.cellText, styles.linkText]}
                 onPress={() => onSelectWreck && onSelectWreck(wreck.id)}
@@ -49,7 +48,6 @@ const WrecksTable: React.FC<WrecksTableProps> = ({ onSelectWreck }) => {
         })}
     	 </DataTable>
      </ScrollView>
-  	</>
   );
 };
 

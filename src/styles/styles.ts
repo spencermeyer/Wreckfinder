@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   menuDropdown: {
     position: 'absolute',
     top: 80,
-    left: 12,
+    right: 12,
     backgroundColor: '#ffffff',
     borderRadius: 12,
     minWidth: 220,
@@ -56,10 +56,18 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     paddingVertical: 6,
   },
+  menuItemContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  menuItemContent: {
+    alignItems: 'flex-end',
+  },
   menuItemTitle: {
     color: '#1E293B',
     fontSize: 16,
     fontWeight: '500',
+    textAlign: 'right',
   },
   menuDivider: {
     backgroundColor: '#E2E8F0',
