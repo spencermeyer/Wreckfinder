@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Platform, PermissionsAndroid } from 'react-native';
 import mapStyles, { lightMapStyle } from '../styles/map';
-import MapView, { Marker, PROVIDER_GOOGLE, Region, UserLocationChangeEvent, Details, PanDragEvent } from 'react-native-maps';
+import MapView, { Marker, Callout, PROVIDER_GOOGLE, Region, UserLocationChangeEvent, Details, PanDragEvent } from 'react-native-maps';
 import { fetchWrecks } from '../api/dataService';
 
 export interface UserLocation {
@@ -27,7 +27,11 @@ interface WreckPoint {
   longitude: number;
 }
 
-const Map = () => {
+export interface MapProps {
+  onSelectWreck?: (id: string | number) => void;
+}
+
+const Map: React.FC<MapProps> = ({ onSelectWreck }) => {
   const initialRegion: Region = {
     latitude: 50.96,
     longitude: -1.39,
@@ -204,7 +208,6 @@ const Map = () => {
 
   return (
     <View style={mapStyles.center}>
-      <Text style={mapStyles.title}>🗺️ Map View</Text>
       <MapView
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
@@ -228,7 +231,20 @@ const Map = () => {
             }}
             title={point.title}
             description={point.description}
-          />
+            onCalloutPress={() => onSelectWreck && onSelectWreck(point.id)}
+          >
+            <Callout onPress={() => onSelectWreck && onSelectWreck(point.id)}>
+              <View style={mapStyles.callout}>
+                <Text style={mapStyles.calloutTitle}>{point.title}</Text>
+                {point.description ? (
+                  <Text style={mapStyles.calloutText}>{point.description}</Text>
+                ) : null}
+                <Text style={{ color: '#2563EB', fontSize: 12, marginTop: 4, textDecorationLine: 'underline', fontWeight: '600' }}>
+                  View details →
+                </Text>
+              </View>
+            </Callout>
+          </Marker>
         ))}
       </MapView>
     </View>

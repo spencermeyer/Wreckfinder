@@ -15,11 +15,13 @@ const BackIcon = () => <Text style={styles.backIcon}>←</Text>;
 const App = () => {
   // 'list' will show your table, 'details' will show row details
   const [currentScreen, setCurrentScreen] = useState('list');
+  const [previousScreen, setPreviousScreen] = useState('list');
   const [selectedWreck, setSelectedWreck] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
 
-  // Helper function to handle row selection from your table
+  // Helper function to handle row selection from table or map
   const handleSelectWreck = (wreckData) => {
+    setPreviousScreen(currentScreen);
     setSelectedWreck(wreckData);
     setCurrentScreen('details');
   };
@@ -42,8 +44,8 @@ const App = () => {
           {currentScreen === 'details' ? (
             <Appbar.Action
               icon={BackIcon}
-              onPress={() => setCurrentScreen('list')}
-              accessibilityLabel="Back to list"
+              onPress={() => setCurrentScreen(previousScreen || 'list')}
+              accessibilityLabel="Back"
             />
           ) : (
             // Simple Action Menu for the main dashboard
@@ -82,7 +84,7 @@ const App = () => {
                   />
                 );
               case 'map':
-                return (<Map/>);
+                return <Map onSelectWreck={handleSelectWreck} />;
               case 'about':
                 return (<About/>);
               default:
