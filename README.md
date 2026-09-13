@@ -118,15 +118,11 @@ now using agy !
 Here are AntiGravity's suggestions for what I should do next:
 
 ### 1. 🔍 Search & Filtering
-
-  • Search Bar in Database: Add a search input above the table to quickly filter by vessel name, nationality, or notes.
   • Filter by Depth: A quick filter slider or presets (e.g. Recreational Diving: 0–30m, Advanced: 30–50m, Deep/Technical: 50m+).
   • Sorting: Sort table columns by Depth, Date Sunk, or Name.
   ──────
   ### 2. 🗺️ Map Enhancements
 
-  • "View on Map" Button in Details: When viewing an individual wreck in Wreck.tsx, add a button that switches to the Map and
-  automatically pans/zooms right to that wreck.
   • Custom Nautical Map Markers: Replace default red Google pins with custom shipwreck pins (or color-code pins based on depth).
   • Map Layer Toggle: Add a button to toggle between standard street map and Satellite / Hybrid view (especially useful for
   identifying coastal reefs and shallow water features).
