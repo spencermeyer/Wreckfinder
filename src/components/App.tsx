@@ -7,6 +7,7 @@ import styles from '../styles/styles';
 import WrecksTable from './WrecksTable';
 import Map from './Map';
 import About from './About';
+import Wreck from './Wreck';
 
 const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
 
@@ -68,8 +69,8 @@ const App = () => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':           
-                return <Map/>;               
-                // return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                // return <Wreck wreckId={114} />;               
+                return <WrecksTable onSelectWreck={handleSelectWreck} />;
               case 'details':
                 // Renders the specific shipwreck detail layout
                 return (
