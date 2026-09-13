@@ -13,6 +13,7 @@ const shipwreckIcon = require('../assets/shipwreck-icon.png');
 
 const BurgerIcon = () => <Text style={styles.menuBurger}>☰</Text>;
 const BackIcon = () => <Text style={styles.backIcon}>←</Text>;
+const SearchIcon = () => <Text style={styles.searchIcon}>🔍</Text>;
 
 const App = () => {
   // 'list' will show your table, 'details' will show row details
@@ -20,9 +21,11 @@ const App = () => {
   const [previousScreen, setPreviousScreen] = useState('list');
   const [selectedWreck, setSelectedWreck] = useState<any>(null);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // Helper function to handle row selection from table or map
   const handleSelectWreck = (wreckData: any) => {
+    setSearchOpen(false);
     setPreviousScreen(currentScreen);
     setSelectedWreck(wreckData);
     setCurrentScreen('details');
@@ -80,6 +83,13 @@ const App = () => {
             } 
             titleStyle={styles.headerTitle}
           />
+          {currentScreen === 'list' && (
+            <Appbar.Action
+              icon={SearchIcon}
+              onPress={() => setSearchOpen((prev) => !prev)}
+              accessibilityLabel="Search wreck titles"
+            />
+          )}
           <Appbar.Action
             icon={BurgerIcon}
             onPress={handleOpenMenu}
@@ -93,7 +103,13 @@ const App = () => {
             console.log('MENU ITEM CHOSEN', currentScreen);
             switch (currentScreen) {
               case 'list':           
-                return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                return (
+                  <WrecksTable
+                    onSelectWreck={handleSelectWreck}
+                    searchOpen={searchOpen}
+                    onToggleSearch={() => setSearchOpen((prev) => !prev)}
+                  />
+                );
               case 'details':
                 return (
                   <Wreck
@@ -107,7 +123,13 @@ const App = () => {
                 return (<About/>);
               default:
                 // Fail-safe: fallback to the main list if something goes wrong
-                return <WrecksTable onSelectWreck={handleSelectWreck} />;
+                return (
+                  <WrecksTable
+                    onSelectWreck={handleSelectWreck}
+                    searchOpen={searchOpen}
+                    onToggleSearch={() => setSearchOpen((prev) => !prev)}
+                  />
+                );
             }
           })()}
         </View>
@@ -120,6 +142,7 @@ const App = () => {
               <Menu.Item
                 onPress={() => {
                   console.log('Menu item chosen: Wrecks Database');
+                  setSearchOpen(false);
                   setCurrentScreen('list');
                   setMenuVisible(false);
                 }}
@@ -132,6 +155,7 @@ const App = () => {
               <Menu.Item
                 onPress={() => {
                   console.log('Menu item chosen: About');
+                  setSearchOpen(false);
                   setCurrentScreen('about');
                   setMenuVisible(false);
                 }}
@@ -144,6 +168,7 @@ const App = () => {
               <Menu.Item
                 onPress={() => {
                   console.log('Menu item chosen: Map');
+                  setSearchOpen(false);
                   setCurrentScreen('map');
                   setMenuVisible(false);
                 }}

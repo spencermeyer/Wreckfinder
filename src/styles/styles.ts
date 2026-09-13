@@ -31,6 +31,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  searchIcon: {
+    fontSize: 22,
+    color: '#fff',
+    lineHeight: 22,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
   menuBurger: {
     fontSize: 24,
     color: '#fff',
