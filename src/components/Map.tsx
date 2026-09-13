@@ -29,26 +29,43 @@ interface WreckPoint {
 
 export interface MapProps {
   onSelectWreck?: (id: string | number) => void;
+  initialCenter?: {
+    latitude: number;
+    longitude: number;
+    latitudeDelta?: number;
+    longitudeDelta?: number;
+    wreckId?: string | number;
+    title?: string;
+  } | null;
 }
 
-const Map: React.FC<MapProps> = ({ onSelectWreck }) => {
-  const initialRegion: Region = {
+const Map: React.FC<MapProps> = ({ onSelectWreck, initialCenter }) => {
+  const defaultRegion: Region = {
     latitude: 50.96,
     longitude: -1.39,
     latitudeDelta: 0.2,
     longitudeDelta: 0.2,
   };
 
+  const startingRegion: Region = initialCenter
+    ? {
+        latitude: Number(initialCenter.latitude),
+        longitude: Number(initialCenter.longitude),
+        latitudeDelta: initialCenter.latitudeDelta || 0.05,
+        longitudeDelta: initialCenter.longitudeDelta || 0.05,
+      }
+    : defaultRegion;
+
   const mapRef = useRef<MapView>(null);
   const userLocationRef = useRef<{ latitude: number; longitude: number } | null>(null);
-  const hasInitialCenteredRef = useRef(false);
-  const currentRegionRef = useRef<Region>(initialRegion);
-  const currentZoomRef = useRef<number>(getZoomLevel(initialRegion.longitudeDelta));
+  const hasInitialCenteredRef = useRef(Boolean(initialCenter));
+  const currentRegionRef = useRef<Region>(startingRegion);
+  const currentZoomRef = useRef<number>(getZoomLevel(startingRegion.longitudeDelta));
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [data, setData] = useState<WreckPoint[]>([]);
   const [_loading, setLoading] = useState(true);
-  const [region, setRegion] = useState<Region>(initialRegion);
+  const [region, setRegion] = useState<Region>(startingRegion);
 
   const requestLocationPermission = async (): Promise<boolean> => {
     if (Platform.OS === 'android') {
@@ -186,15 +203,39 @@ const Map: React.FC<MapProps> = ({ onSelectWreck }) => {
   };
 
   useEffect(() => {
-    loadData();
-    centerOnUserLocation();
+    if (initialCenter) {
+      hasInitialCenteredRef.current = true;
+      const targetRegion: Region = {
+        latitude: Number(initialCenter.latitude),
+        longitude: Number(initialCenter.longitude),
+        latitudeDelta: initialCenter.latitudeDelta || 0.05,
+        longitudeDelta: initialCenter.longitudeDelta || 0.05,
+      };
+      currentRegionRef.current = targetRegion;
+      setRegion(targetRegion);
+      loadData(targetRegion);
 
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []);
+      const timer = setTimeout(() => {
+        mapRef.current?.animateToRegion(targetRegion, 1000);
+      }, 150);
+
+      return () => {
+        clearTimeout(timer);
+        if (debounceTimerRef.current) {
+          clearTimeout(debounceTimerRef.current);
+        }
+      };
+    } else {
+      loadData();
+      centerOnUserLocation();
+
+      return () => {
+        if (debounceTimerRef.current) {
+          clearTimeout(debounceTimerRef.current);
+        }
+      };
+    }
+  }, [initialCenter]);
 
   const loadData = async (targetRegion = currentRegionRef.current) => {
     setLoading(true);
@@ -222,30 +263,61 @@ const Map: React.FC<MapProps> = ({ onSelectWreck }) => {
         onPanDrag={handlePanDrag}
       >
         {/* Render markers once data loads */}
-        {data.map((point) => (
+        {data.map((point) => {
+          const isTargetWreck =
+            Boolean(initialCenter?.wreckId && String(point.id) === String(initialCenter.wreckId));
+          return (
+            <Marker
+              key={point.id}
+              coordinate={{
+                latitude: Number(point.latitude),
+                longitude: Number(point.longitude),
+              }}
+              title={point.title}
+              description={point.description}
+              pinColor={isTargetWreck ? '#DC2626' : undefined}
+              onCalloutPress={() => onSelectWreck && onSelectWreck(point.id)}
+            >
+              <Callout onPress={() => onSelectWreck && onSelectWreck(point.id)}>
+                <View style={mapStyles.callout}>
+                  <Text style={mapStyles.calloutTitle}>
+                    {isTargetWreck ? `📍 ${point.title}` : point.title}
+                  </Text>
+                  {point.description ? (
+                    <Text style={mapStyles.calloutText}>{point.description}</Text>
+                  ) : null}
+                  <Text style={{ color: '#2563EB', fontSize: 12, marginTop: 4, textDecorationLine: 'underline', fontWeight: '600' }}>
+                    View details →
+                  </Text>
+                </View>
+              </Callout>
+            </Marker>
+          );
+        })}
+
+        {/* Fallback pin for initialCenter if not yet returned in data */}
+        {initialCenter && !data.some((p) => String(p.id) === String(initialCenter.wreckId)) && (
           <Marker
-            key={point.id}
+            key={`target-${initialCenter.wreckId || 'center'}`}
             coordinate={{
-              latitude: Number(point.latitude),
-              longitude: Number(point.longitude),
+              latitude: Number(initialCenter.latitude),
+              longitude: Number(initialCenter.longitude),
             }}
-            title={point.title}
-            description={point.description}
-            onCalloutPress={() => onSelectWreck && onSelectWreck(point.id)}
+            title={initialCenter.title || 'Selected Wreck'}
+            description="Coordinates from wreck details"
+            pinColor="#DC2626"
+            onCalloutPress={() => initialCenter.wreckId && onSelectWreck && onSelectWreck(initialCenter.wreckId)}
           >
-            <Callout onPress={() => onSelectWreck && onSelectWreck(point.id)}>
+            <Callout onPress={() => initialCenter.wreckId && onSelectWreck && onSelectWreck(initialCenter.wreckId)}>
               <View style={mapStyles.callout}>
-                <Text style={mapStyles.calloutTitle}>{point.title}</Text>
-                {point.description ? (
-                  <Text style={mapStyles.calloutText}>{point.description}</Text>
-                ) : null}
+                <Text style={mapStyles.calloutTitle}>📍 {initialCenter.title || 'Selected Wreck'}</Text>
                 <Text style={{ color: '#2563EB', fontSize: 12, marginTop: 4, textDecorationLine: 'underline', fontWeight: '600' }}>
                   View details →
                 </Text>
               </View>
             </Callout>
           </Marker>
-        ))}
+        )}
       </MapView>
     </View>
   );

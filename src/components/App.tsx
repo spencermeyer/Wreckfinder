@@ -22,6 +22,14 @@ const App = () => {
   const [selectedWreck, setSelectedWreck] = useState<any>(null);
   const [menuVisible, setMenuVisible] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mapInitialCenter, setMapInitialCenter] = useState<{
+    latitude: number;
+    longitude: number;
+    latitudeDelta?: number;
+    longitudeDelta?: number;
+    wreckId?: string | number;
+    title?: string;
+  } | null>(null);
 
   // Helper function to handle row selection from table or map
   const handleSelectWreck = (wreckData: any) => {
@@ -29,6 +37,26 @@ const App = () => {
     setPreviousScreen(currentScreen);
     setSelectedWreck(wreckData);
     setCurrentScreen('details');
+  };
+
+  // Helper function to navigate from wreck details to map centered on wreck
+  const handleViewOnMap = (target: {
+    latitude: number;
+    longitude: number;
+    wreckId?: string | number;
+    title?: string;
+  }) => {
+    setSearchOpen(false);
+    setPreviousScreen('details');
+    setMapInitialCenter({
+      latitude: target.latitude,
+      longitude: target.longitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+      wreckId: target.wreckId,
+      title: target.title,
+    });
+    setCurrentScreen('map');
   };
 
   const handleOpenMenu = () => {
@@ -62,11 +90,17 @@ const App = () => {
       <SafeAreaView style={styles.container}>
         {/* Top Header Bar */}
         <Appbar.Header style={styles.header}>
-          {currentScreen === 'details' && (
+          {(currentScreen === 'details' || (currentScreen === 'map' && previousScreen === 'details')) && (
             <Appbar.Action
               icon={BackIcon}
               isLeading={true}
-              onPress={() => setCurrentScreen(previousScreen || 'list')}
+              onPress={() => {
+                if (currentScreen === 'map' && previousScreen === 'details') {
+                  setCurrentScreen('details');
+                } else {
+                  setCurrentScreen(previousScreen || 'list');
+                }
+              }}
               accessibilityLabel="Back"
             />
           )}
@@ -115,10 +149,16 @@ const App = () => {
                   <Wreck
                     wreckId={typeof selectedWreck === 'object' && selectedWreck !== null ? selectedWreck.id : selectedWreck}
                     wreck={typeof selectedWreck === 'object' ? selectedWreck : null}
+                    onViewOnMap={handleViewOnMap}
                   />
                 );
               case 'map':
-                return <Map onSelectWreck={handleSelectWreck} />;
+                return (
+                  <Map
+                    onSelectWreck={handleSelectWreck}
+                    initialCenter={mapInitialCenter}
+                  />
+                );
               case 'about':
                 return (<About/>);
               default:
@@ -143,6 +183,8 @@ const App = () => {
                 onPress={() => {
                   console.log('Menu item chosen: Wrecks Database');
                   setSearchOpen(false);
+                  setMapInitialCenter(null);
+                  setPreviousScreen(currentScreen);
                   setCurrentScreen('list');
                   setMenuVisible(false);
                 }}
@@ -156,6 +198,8 @@ const App = () => {
                 onPress={() => {
                   console.log('Menu item chosen: About');
                   setSearchOpen(false);
+                  setMapInitialCenter(null);
+                  setPreviousScreen(currentScreen);
                   setCurrentScreen('about');
                   setMenuVisible(false);
                 }}
@@ -169,6 +213,8 @@ const App = () => {
                 onPress={() => {
                   console.log('Menu item chosen: Map');
                   setSearchOpen(false);
+                  setMapInitialCenter(null);
+                  setPreviousScreen(currentScreen);
                   setCurrentScreen('map');
                   setMenuVisible(false);
                 }}
