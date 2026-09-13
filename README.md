@@ -115,5 +115,45 @@ optional:
 
 now using agy !
 
+Here are AntiGravity's suggestions for what I should do next:
+
+### 1. 🔍 Search & Filtering
+
+  • Search Bar in Database: Add a search input above the table to quickly filter by vessel name, nationality, or notes.
+  • Filter by Depth: A quick filter slider or presets (e.g. Recreational Diving: 0–30m, Advanced: 30–50m, Deep/Technical: 50m+).
+  • Sorting: Sort table columns by Depth, Date Sunk, or Name.
+  ──────
+  ### 2. 🗺️ Map Enhancements
+
+  • "View on Map" Button in Details: When viewing an individual wreck in Wreck.tsx, add a button that switches to the Map and
+  automatically pans/zooms right to that wreck.
+  • Custom Nautical Map Markers: Replace default red Google pins with custom shipwreck pins (or color-code pins based on depth).
+  • Map Layer Toggle: Add a button to toggle between standard street map and Satellite / Hybrid view (especially useful for
+  identifying coastal reefs and shallow water features).
+  ──────
+  ### 3. ⭐ Saved Wrecks & Offline Mode
+
+  • Favorites / Bookmarks: Let users tap a star (⭐) to bookmark wrecks they want to explore or dive.
+  • Offline Storage (AsyncStorage): Cache bookmarked wrecks locally so users can review coordinates and notes even when out at
+  sea on a dive boat with no mobile reception.
+  ──────
+  ### 4. 🤿 Dive Planning & Utility
+
+  • Open in External Navigation: Add a "Navigate Here" button that opens the coordinates in Google Maps, Apple Maps, or marine
+  navigation apps.
+  • Personal Dive Notes: Allow users to attach private notes to a wreck (e.g. "Great visibility on 12 June", "Need 32% Nitrox",
+  "Entry point on stern").
+  • Tides & Weather: Pull in live marine weather or tidal stream info for the wreck's coordinates.
+  ──────
+  ### 5. 📱 Mobile UI & Layout Polish
+
+  • Card View for Database: The current WrecksTable.tsx is great for data, but a toggleable Card View (with vessel name, depth
+  badge, and location snippet) can feel much more natural on vertical phone screens.
+  • Photo / Image Gallery: If your API provides photos or side-scan sonar imagery, display an image gallery at the top of the
+  wreck details screen.
+
+
+
+
 
 
